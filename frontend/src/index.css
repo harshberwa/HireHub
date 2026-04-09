@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hide browser-native password reveal toggle so we only show our custom toggle */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-textfield-decoration-container {
+	display: none !important;
+}
+
+/* 🔥 Remove number input arrows (Chrome, Edge, Safari) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* 🔥 Remove number input arrows (Firefox) */
+input[type="number"] {
+	-moz-appearance: textfield;
+}
