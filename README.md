@@ -102,3 +102,20 @@ HireHub is a full-stack job portal built using the MERN stack (MongoDB, Express,
 ---
 
 ## 📂 Project Structure
+
+HireHub/
+│
+├── backend/
+│ ├── controllers/
+│ ├── models/
+│ ├── routes/
+│ ├── middlewares/
+│ └── server.js
+│
+├── frontend/
+│ ├── src/
+│ │ ├── components/
+│ │ ├── pages/
+│ │ ├── services/
+│ │ └── hooks/
+│ └── vite.config.js
