@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import API from "../services/api";
+import toast from "react-hot-toast"; // ✅ ADDED
 
 function Register() {
 	const [name, setName] = useState("");
@@ -23,18 +24,23 @@ function Register() {
 				role,
 			});
 
-			alert(res.data.message);
+			// ✅ SUCCESS TOAST
+			toast.success(res.data.message);
 
 			setName("");
 			setEmail("");
 			setPassword("");
 			setRole("student");
 
-			setTimeout(() => {
-				navigate("/login");
-			}, 100);
+			// ✅ HR → LOGIN REDIRECT
+			if (role === "hr") {
+				setTimeout(() => {
+					navigate("/login");
+				}, 1000);
+			}
 		} catch (error) {
-			alert(error.response?.data?.message || "Registration failed");
+			// ❌ ERROR TOAST
+			toast.error(error.response?.data?.message || "Registration failed");
 		}
 	};
 
@@ -76,7 +82,7 @@ function Register() {
 						/>
 					</div>
 
-					{/* Role Selection */}
+					{/* Role */}
 					<div>
 						<label className="block text-gray-700 dark:text-gray-300 mb-1">
 							Register As
@@ -92,6 +98,20 @@ function Register() {
 						</select>
 					</div>
 
+					{/* INFO TEXT */}
+					{role === "student" && (
+						<p className="text-sm text-gray-600 dark:text-gray-300">
+							Verification link will be sent to your email 📩
+						</p>
+					)}
+
+					{role === "hr" && (
+						<p className="text-sm text-gray-600 dark:text-gray-300">
+							Waiting for admin approval ⏳
+						</p>
+					)}
+
+					{/* PASSWORD */}
 					<div>
 						<label className="block text-gray-700 dark:text-gray-300 mb-1">
 							Password
@@ -100,8 +120,7 @@ function Register() {
 						<div className="relative">
 							<input
 								type={showPassword ? "text" : "password"}
-								placeholder="Enter your password"
-								className="w-full appearance-none border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-4 py-2 pr-10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-purple-500 transition"
+								className="w-full border px-4 py-2 pr-10 rounded-lg dark:bg-gray-700 dark:text-white"
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								required

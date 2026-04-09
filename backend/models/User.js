@@ -27,10 +27,12 @@ const userSchema = new mongoose.Schema(
 			enum: ["student", "hr", "admin"],
 			default: "student",
 		},
+
 		resume: {
 			type: String,
 			default: "",
 		},
+
 		bio: {
 			type: String,
 			default: "",
@@ -40,10 +42,22 @@ const userSchema = new mongoose.Schema(
 			type: [String],
 			default: [],
 		},
+
 		isApproved: {
 			type: Boolean,
 			default: false,
 		},
+
+		isVerified: {
+			type: Boolean,
+			default: false,
+		},
+
+		verificationToken: {
+			type: String,
+			default: "",
+		},
+
 		savedJobs: [
 			{
 				type: mongoose.Schema.Types.ObjectId,
@@ -51,7 +65,6 @@ const userSchema = new mongoose.Schema(
 			},
 		],
 	},
-
 	{ timestamps: true },
 );
 

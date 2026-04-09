@@ -22,16 +22,12 @@ function Home() {
 					</span>
 				</h1>
 
-				<p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-10 max-w-2xl mx-auto text-justify">
-					HireHub is a modern recruitment platform that connects
-					talented students with hiring companies through a simple and
-					efficient system. Students can easily explore job
-					opportunities and apply within seconds, while HR
-					professionals can post jobs, review applicants, and manage
-					the entire hiring workflow in one place. Built with the MERN
-					stack, HireHub delivers a fast, secure, and seamless hiring
-					experience for both students and recruiters through a
-					responsive and user-friendly interface.
+				<p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed mb-10 max-w-2xl mx-auto">
+					HireHub connects students with hiring companies through a
+					fast, secure, and modern recruitment platform. Students can
+					discover jobs and apply with ease, while HR professionals
+					can post openings, review applicants, and streamline hiring
+					in one place.
 				</p>
 
 				<button

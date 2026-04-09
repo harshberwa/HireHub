@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
+import toast from "react-hot-toast";
 
 function Login() {
 	const [email, setEmail] = useState("");
@@ -21,18 +22,20 @@ function Login() {
 			localStorage.setItem("token", res.data.token);
 			localStorage.setItem("user", JSON.stringify(res.data.user));
 
-			// ✅ ADD THIS (important for auto logout)
+			// ✅ important for auto logout
 			localStorage.setItem("loginTime", Date.now());
 
 			setEmail("");
 			setPassword("");
 
+			toast.success(res.data.message || "Login successful ✅");
+
 			setTimeout(() => {
 				navigate("/");
 				window.location.reload();
-			}, 100);
+			}, 1000);
 		} catch (error) {
-			alert(error.response?.data?.message || "Login failed");
+			toast.error(error.response?.data?.message || "Login failed");
 		}
 	};
 

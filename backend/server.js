@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -13,8 +15,6 @@ const applicationRoutes = require("./routes/applicationRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 
 const { protect, authorizeRoles } = require("./middlewares/authMiddleware");
-
-dotenv.config();
 
 // Connect to Database
 connectDB();

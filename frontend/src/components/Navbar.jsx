@@ -205,26 +205,38 @@ function Navbar() {
 									>
 										Profile
 									</Link>
-									<Link
-										to="/saved-jobs"
-										onClick={() => setOpen(false)}
-										className="block px-4 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-									>
-										Saved Jobs
-									</Link>
+
 									{user.role === "student" && (
-										<Link
-											to="/my-applications"
-											onClick={() => setOpen(false)}
-											className="block px-4 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-										>
-											My Applications
-										</Link>
+										<>
+											<Link
+												to="/saved-jobs"
+												onClick={() => setOpen(false)}
+												className="block px-4 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+											>
+												Saved Jobs
+											</Link>
+
+											<Link
+												to="/my-applications"
+												onClick={() => setOpen(false)}
+												className="block px-4 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+											>
+												My Applications
+											</Link>
+										</>
 									)}
 
 									{/* HR */}
 									{user.role === "hr" && (
 										<>
+											<Link
+												to="/saved-jobs"
+												onClick={() => setOpen(false)}
+												className="block px-4 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+											>
+												Saved Jobs
+											</Link>
+
 											<Link
 												to="/post-job"
 												onClick={() => setOpen(false)}

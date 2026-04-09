@@ -24,6 +24,8 @@ import Profile from "./pages/Profile";
 import HrDashboard from "./pages/HrDashboard";
 import MyJobs from "./pages/MyJobs";
 
+import VerifyEmail from "./pages/VerifyEmail";
+
 import useAutoLogout from "./hooks/useAutoLogout";
 
 // ✅ Wrapper (IMPORTANT)
@@ -51,6 +53,10 @@ function App() {
 						<Route path="/" element={<Home />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />
+						<Route
+							path="/verify-email/:token"
+							element={<VerifyEmail />}
+						/>
 
 						{/* ================= ADMIN ================= */}
 						<Route

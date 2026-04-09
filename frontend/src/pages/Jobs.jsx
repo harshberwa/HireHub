@@ -150,12 +150,11 @@ function Jobs() {
 
 	return (
 		<div className="px-6 md:px-10 py-12 min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-950">
-			{/* 🔥 HEADING (MATCHED) */}
 			<h2 className="text-4xl font-bold text-center mb-10 text-blue-600 dark:text-purple-400">
 				Available Jobs
 			</h2>
 
-			{/* 🔥 FILTERS (GLASS STYLE) */}
+			{/* FILTERS */}
 			<div className="max-w-5xl mx-auto mb-10 grid md:grid-cols-4 gap-4 backdrop-blur-xl bg-white/60 dark:bg-white/5 p-4 rounded-2xl border border-white/20 shadow">
 				<input
 					type="text"
@@ -192,11 +191,23 @@ function Jobs() {
 				</select>
 			</div>
 
-			{/* 🔥 JOB LIST (MATCHED WITH MYJOBS) */}
+			{/* JOB LIST */}
 			<div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 				{jobs.map((job) => {
 					const isApplied = appliedJobs.includes(job._id.toString());
 					const isSaved = savedJobs.includes(job._id.toString());
+
+					const postedById =
+						typeof job.postedBy === "object"
+							? job.postedBy?._id
+							: job.postedBy;
+
+					const userId = user?._id || user?.id;
+
+					const isOwner =
+						postedById &&
+						userId &&
+						postedById.toString() === userId.toString();
 
 					return (
 						<div
@@ -266,6 +277,28 @@ function Jobs() {
 												: "Apply Now"}
 									</button>
 								)}
+
+								{user?.role === "hr" &&
+									(isOwner ? (
+										<button
+											onClick={(e) => {
+												e.stopPropagation();
+												navigate(
+													`/applicants/${job._id}`,
+												);
+											}}
+											className="w-full py-2 rounded-lg text-white font-medium bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition"
+										>
+											View Applicants
+										</button>
+									) : (
+										<button
+											disabled
+											className="w-full py-2 rounded-lg text-white font-medium bg-gray-400 cursor-not-allowed"
+										>
+											Not Your Job
+										</button>
+									))}
 							</div>
 						</div>
 					);
