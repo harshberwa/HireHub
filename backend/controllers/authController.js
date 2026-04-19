@@ -18,12 +18,41 @@ const registerUser = async (req, res) => {
 
 		const userExists = await User.findOne({ email });
 
+		// If user already exists
 		if (userExists) {
+			// Student exists but not verified -> resend verification email
 			if (userExists.role === "student" && !userExists.isVerified) {
-				return res.status(400).json({
-					message:
-						"Email already registered but not verified. Please verify your email first.",
-				});
+				try {
+					const newToken = crypto.randomBytes(32).toString("hex");
+					userExists.verificationToken = newToken;
+					await userExists.save();
+
+					const verifyUrl = `${process.env.CLIENT_URL}/verify-email?token=${newToken}`;
+
+					await sendEmail({
+						email: userExists.email,
+						subject: "Verify your HireHub account",
+						html: `
+							<h2>Welcome back to HireHub 🚀</h2>
+							<p>Your email is not verified yet. Click the button below to verify your email:</p>
+							<a href="${verifyUrl}" style="display:inline-block;padding:10px 18px;background:#2563eb;color:#ffffff;text-decoration:none;border-radius:6px;">
+								Verify Email
+							</a>
+							<p style="margin-top:16px;">If the button does not work, copy this link:</p>
+							<p>${verifyUrl}</p>
+						`,
+					});
+
+					return res.status(200).json({
+						message:
+							"Email already registered but not verified. Verification email resent successfully.",
+					});
+				} catch (mailError) {
+					return res.status(500).json({
+						message:
+							"Email already registered but not verified. Failed to resend verification email.",
+					});
+				}
 			}
 
 			return res.status(400).json({
