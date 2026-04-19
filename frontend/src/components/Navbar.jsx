@@ -13,7 +13,7 @@ function Navbar() {
 	const dropdownRef = useRef();
 	const notifRef = useRef();
 
-	// ✅ LOAD USER
+	// LOAD USER
 	useEffect(() => {
 		const loadUser = () => {
 			try {
@@ -32,10 +32,11 @@ function Navbar() {
 
 		loadUser();
 		window.addEventListener("storage", loadUser);
+
 		return () => window.removeEventListener("storage", loadUser);
 	}, []);
 
-	// ✅ FETCH NOTIFICATIONS
+	// FETCH NOTIFICATIONS
 	useEffect(() => {
 		const fetchNotifications = async () => {
 			try {
@@ -44,24 +45,28 @@ function Navbar() {
 						Authorization: `Bearer ${localStorage.getItem("token")}`,
 					},
 				});
+
 				const data = await res.json();
 				setNotifications(data.notifications || []);
-			} catch {}
+			} catch {
+				setNotifications([]);
+			}
 		};
 
 		if (user) fetchNotifications();
 	}, [user]);
 
-	// ✅ DARK MODE
+	// DARK MODE
 	useEffect(() => {
 		const savedTheme = localStorage.getItem("theme");
+
 		if (savedTheme === "dark") {
 			document.documentElement.classList.add("dark");
 			setDarkMode(true);
 		}
 	}, []);
 
-	// ✅ CLOSE DROPDOWN
+	// CLOSE DROPDOWNS ON OUTSIDE CLICK
 	useEffect(() => {
 		const handleClickOutside = (event) => {
 			if (
@@ -70,17 +75,19 @@ function Navbar() {
 			) {
 				setOpen(false);
 			}
+
 			if (notifRef.current && !notifRef.current.contains(event.target)) {
 				setNotifOpen(false);
 			}
 		};
 
 		document.addEventListener("mousedown", handleClickOutside);
+
 		return () =>
 			document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
 
-	// ✅ THEME
+	// THEME TOGGLE
 	const toggleDarkMode = () => {
 		if (darkMode) {
 			document.documentElement.classList.remove("dark");
@@ -89,13 +96,17 @@ function Navbar() {
 			document.documentElement.classList.add("dark");
 			localStorage.setItem("theme", "dark");
 		}
+
 		setDarkMode(!darkMode);
 	};
 
-	// ✅ LOGOUT
+	// LOGOUT
 	const handleLogout = () => {
-		localStorage.clear();
+		localStorage.removeItem("token");
+		localStorage.removeItem("user");
 		setUser(null);
+		setOpen(false);
+		setNotifOpen(false);
 		navigate("/login");
 	};
 
@@ -112,15 +123,91 @@ function Navbar() {
 				</Link>
 
 				<div className="flex items-center space-x-5">
-					{/* JOBS */}
-					<Link
-						to="/jobs"
-						className="text-gray-900 dark:text-white font-medium"
-					>
-						Jobs
-					</Link>
+					{/* COMMON LINKS */}
+					{(!user ||
+						user.role === "student" ||
+						user.role === "hr") && (
+						<Link
+							to="/jobs"
+							className="text-gray-900 dark:text-white font-medium"
+						>
+							Jobs
+						</Link>
+					)}
 
-					{/* 🔔 NOTIFICATIONS */}
+					{/* STUDENT TOP LINKS */}
+					{user?.role === "student" && (
+						<>
+							<Link
+								to="/saved-jobs"
+								className="text-gray-900 dark:text-white font-medium"
+							>
+								Saved Jobs
+							</Link>
+							<Link
+								to="/my-applications"
+								className="text-gray-900 dark:text-white font-medium"
+							>
+								My Applications
+							</Link>
+						</>
+					)}
+
+					{/* HR TOP LINKS */}
+					{user?.role === "hr" && (
+						<>
+							<Link
+								to="/post-job"
+								className="text-gray-900 dark:text-white font-medium"
+							>
+								Post Job
+							</Link>
+							<Link
+								to="/my-jobs"
+								className="text-gray-900 dark:text-white font-medium"
+							>
+								My Jobs
+							</Link>
+							<Link
+								to="/hr-dashboard"
+								className="text-gray-900 dark:text-white font-medium"
+							>
+								HR Dashboard
+							</Link>
+						</>
+					)}
+
+					{/* ADMIN TOP LINKS */}
+					{user?.role === "admin" && (
+						<>
+							<Link
+								to="/admin"
+								className="text-gray-900 dark:text-white font-medium"
+							>
+								Dashboard
+							</Link>
+							<Link
+								to="/admin/users"
+								className="text-gray-900 dark:text-white font-medium"
+							>
+								Users
+							</Link>
+							<Link
+								to="/admin/jobs"
+								className="text-gray-900 dark:text-white font-medium"
+							>
+								Jobs
+							</Link>
+							<Link
+								to="/admin/hr-approval"
+								className="text-gray-900 dark:text-white font-medium"
+							>
+								HR Approval
+							</Link>
+						</>
+					)}
+
+					{/* NOTIFICATIONS */}
 					{user && (
 						<div className="relative" ref={notifRef}>
 							<div
@@ -164,7 +251,7 @@ function Navbar() {
 						</div>
 					)}
 
-					{/* GUEST */}
+					{/* GUEST LINKS */}
 					{!user && (
 						<>
 							<Link
@@ -226,17 +313,8 @@ function Navbar() {
 										</>
 									)}
 
-									{/* HR */}
 									{user.role === "hr" && (
 										<>
-											<Link
-												to="/saved-jobs"
-												onClick={() => setOpen(false)}
-												className="block px-4 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-											>
-												Saved Jobs
-											</Link>
-
 											<Link
 												to="/post-job"
 												onClick={() => setOpen(false)}
@@ -262,6 +340,7 @@ function Navbar() {
 											</Link>
 										</>
 									)}
+
 									{user.role === "admin" && (
 										<>
 											<Link
@@ -271,6 +350,7 @@ function Navbar() {
 											>
 												Dashboard
 											</Link>
+
 											<Link
 												to="/admin/users"
 												onClick={() => setOpen(false)}
@@ -278,6 +358,7 @@ function Navbar() {
 											>
 												Users
 											</Link>
+
 											<Link
 												to="/admin/jobs"
 												onClick={() => setOpen(false)}
@@ -285,6 +366,15 @@ function Navbar() {
 											>
 												Jobs
 											</Link>
+
+											<Link
+												to="/admin/hr-approval"
+												onClick={() => setOpen(false)}
+												className="block px-4 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+											>
+												HR Approval
+											</Link>
+
 											<Link
 												to="/admin/analytics"
 												onClick={() => setOpen(false)}
@@ -294,6 +384,7 @@ function Navbar() {
 											</Link>
 										</>
 									)}
+
 									<button
 										onClick={handleLogout}
 										className="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"

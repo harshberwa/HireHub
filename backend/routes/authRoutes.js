@@ -14,10 +14,10 @@ const upload = require("../middlewares/uploadMiddleware");
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 
-// ✅ EMAIL VERIFY
-router.get("/verify-email/:token", verifyEmail);
+// EMAIL VERIFY
+router.get("/verify-email", verifyEmail);
 
-// ✅ RESUME UPLOAD
+// RESUME UPLOAD
 router.post("/upload-resume", protect, upload.single("resume"), uploadResume);
 
 module.exports = router;

@@ -1,29 +1,38 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import toast from "react-hot-toast";
 
 function VerifyEmail() {
-	const { token } = useParams();
+	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
 	const [message, setMessage] = useState("Verifying your email...");
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const verifyUserEmail = async () => {
+			const token = searchParams.get("token");
+
+			if (!token) {
+				const errorMessage = "Verification token is missing.";
+				setMessage(errorMessage);
+				toast.error(errorMessage);
+				setLoading(false);
+				return;
+			}
+
 			try {
-				const res = await API.get(`/auth/verify-email/${token}`);
+				const res = await API.get(`/auth/verify-email?token=${token}`);
 
 				setMessage(
 					res.data.message || "Email verified successfully 🎉",
 				);
 
-				// ✅ SUCCESS TOAST
 				toast.success(
 					res.data.message || "Email verified successfully 🎉",
 				);
 
-				// ✅ AUTO LOGIN
+				// AUTO LOGIN
 				localStorage.setItem("token", res.data.token);
 				localStorage.setItem("user", JSON.stringify(res.data.user));
 				localStorage.setItem("loginTime", Date.now());
@@ -38,18 +47,14 @@ function VerifyEmail() {
 					"Verification failed. Invalid or expired link.";
 
 				setMessage(errorMessage);
-
-				// ❌ ERROR TOAST
 				toast.error(errorMessage);
 			} finally {
 				setLoading(false);
 			}
 		};
 
-		if (token) {
-			verifyUserEmail();
-		}
-	}, [token, navigate]);
+		verifyUserEmail();
+	}, [searchParams, navigate]);
 
 	return (
 		<div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-950">

@@ -19,7 +19,6 @@ const registerUser = async (req, res) => {
 		const userExists = await User.findOne({ email });
 
 		if (userExists) {
-			// ✅ BETTER MESSAGE FOR UNVERIFIED STUDENT
 			if (userExists.role === "student" && !userExists.isVerified) {
 				return res.status(400).json({
 					message:
@@ -38,7 +37,7 @@ const registerUser = async (req, res) => {
 		let verificationToken = "";
 		let isVerified = true;
 
-		// ✅ ONLY STUDENT NEEDS EMAIL VERIFICATION
+		// Only student needs email verification
 		if (finalRole === "student") {
 			verificationToken = crypto.randomBytes(32).toString("hex");
 			isVerified = false;
@@ -54,10 +53,10 @@ const registerUser = async (req, res) => {
 			isVerified,
 		});
 
-		// ✅ SEND VERIFICATION EMAIL ONLY TO STUDENT
+		// Send verification email only to student
 		if (user.role === "student") {
 			try {
-				const verifyUrl = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+				const verifyUrl = `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
 
 				await sendEmail({
 					email: user.email,
@@ -73,7 +72,6 @@ const registerUser = async (req, res) => {
 					`,
 				});
 			} catch (mailError) {
-				// ✅ IF MAIL FAILS, DELETE USER
 				await User.findByIdAndDelete(user._id);
 
 				return res.status(500).json({
@@ -83,7 +81,7 @@ const registerUser = async (req, res) => {
 			}
 		}
 
-		res.status(201).json({
+		return res.status(201).json({
 			message:
 				user.role === "student"
 					? "Student registered successfully. Please verify your email."
@@ -92,7 +90,7 @@ const registerUser = async (req, res) => {
 						: "User Registered Successfully",
 		});
 	} catch (error) {
-		res.status(500).json({
+		return res.status(500).json({
 			message: error.message,
 		});
 	}
@@ -124,14 +122,14 @@ const loginUser = async (req, res) => {
 			});
 		}
 
-		// ✅ ONLY STUDENT NEEDS VERIFIED EMAIL
+		// Only student needs verified email
 		if (user.role === "student" && !user.isVerified) {
 			return res.status(403).json({
 				message: "Please verify your email first",
 			});
 		}
 
-		// ✅ HR STILL NEEDS ADMIN APPROVAL
+		// HR still needs admin approval
 		if (user.role === "hr" && !user.isApproved) {
 			return res.status(403).json({
 				message: "HR not approved by admin yet",
@@ -144,7 +142,7 @@ const loginUser = async (req, res) => {
 			{ expiresIn: "7d" },
 		);
 
-		res.json({
+		return res.json({
 			message: "Login Successful",
 			token,
 			user: {
@@ -155,7 +153,7 @@ const loginUser = async (req, res) => {
 			},
 		});
 	} catch (error) {
-		res.status(500).json({
+		return res.status(500).json({
 			message: error.message,
 		});
 	}
@@ -163,7 +161,13 @@ const loginUser = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
 	try {
-		const { token } = req.params;
+		const { token } = req.query;
+
+		if (!token) {
+			return res.status(400).json({
+				message: "Verification token is missing",
+			});
+		}
 
 		const user = await User.findOne({ verificationToken: token });
 
@@ -183,7 +187,7 @@ const verifyEmail = async (req, res) => {
 			{ expiresIn: "7d" },
 		);
 
-		res.json({
+		return res.json({
 			message: "Email verified successfully 🎉",
 			token: jwtToken,
 			user: {
@@ -194,7 +198,7 @@ const verifyEmail = async (req, res) => {
 			},
 		});
 	} catch (error) {
-		res.status(500).json({
+		return res.status(500).json({
 			message: error.message,
 		});
 	}
@@ -219,12 +223,14 @@ const uploadResume = async (req, res) => {
 		user.resume = `/uploads/${req.file.filename}`;
 		await user.save();
 
-		res.json({
+		return res.json({
 			message: "Resume uploaded successfully",
 			resume: user.resume,
 		});
 	} catch (error) {
-		res.status(500).json({ message: error.message });
+		return res.status(500).json({
+			message: error.message,
+		});
 	}
 };
 

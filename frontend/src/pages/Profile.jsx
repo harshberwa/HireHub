@@ -8,12 +8,17 @@ function Profile() {
 		email: "",
 		role: "",
 		resume: "",
-		bio: "", // ✅ added
-		skills: [], // ✅ added
+		bio: "",
+		skills: [],
 	});
 
 	const [file, setFile] = useState(null);
 	const [loading, setLoading] = useState(false);
+
+	// ✅ DEPLOY FIX
+	const backendBaseUrl = (
+		import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+	).replace("/api", "");
 
 	// ✅ LOAD PROFILE
 	useEffect(() => {
@@ -58,7 +63,9 @@ function Profile() {
 	};
 
 	// ✅ UPLOAD RESUME
-	const handleUpload = async () => {
+	const handleUpload = async (e) => {
+		e.preventDefault();
+
 		if (!file) {
 			return toast.error("Select a PDF file");
 		}
@@ -137,7 +144,7 @@ function Profile() {
 						/>
 					</div>
 
-					{/* ✅ BIO */}
+					{/* BIO */}
 					<div>
 						<label className="block text-gray-700 dark:text-gray-300 mb-1">
 							Bio
@@ -150,7 +157,7 @@ function Profile() {
 						/>
 					</div>
 
-					{/* ✅ SKILLS INPUT */}
+					{/* SKILLS INPUT */}
 					<div>
 						<label className="block text-gray-700 dark:text-gray-300 mb-1">
 							Skills (comma separated)
@@ -168,7 +175,7 @@ function Profile() {
 						/>
 					</div>
 
-					{/* ✅ SKILLS DISPLAY */}
+					{/* SKILLS DISPLAY */}
 					<div className="flex flex-wrap gap-2">
 						{Array.isArray(user.skills) &&
 							user.skills.map((skill, i) => (
@@ -181,7 +188,7 @@ function Profile() {
 							))}
 					</div>
 
-					{/* 🔥 RESUME SECTION (UNCHANGED) */}
+					{/* RESUME SECTION */}
 					<h3 className="text-lg font-semibold mb-4 text-gray-700 dark:text-gray-300">
 						Resume
 					</h3>
@@ -215,7 +222,7 @@ function Profile() {
 						{user.resume && (
 							<div className="flex justify-center gap-4 mt-4">
 								<a
-									href={`http://localhost:5000${user.resume}`}
+									href={`${backendBaseUrl}${user.resume}`}
 									target="_blank"
 									rel="noreferrer"
 									className="px-4 py-1 text-sm rounded-lg bg-blue-500 text-white"
@@ -224,7 +231,7 @@ function Profile() {
 								</a>
 
 								<a
-									href={`http://localhost:5000${user.resume}`}
+									href={`${backendBaseUrl}${user.resume}`}
 									download
 									className="px-4 py-1 text-sm rounded-lg bg-green-500 text-white"
 								>
