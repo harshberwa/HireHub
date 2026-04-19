@@ -150,6 +150,7 @@ const loginUser = async (req, res) => {
 				name: user.name,
 				email: user.email,
 				role: user.role,
+				isVerified: user.isVerified,
 			},
 		});
 	} catch (error) {
@@ -178,7 +179,7 @@ const verifyEmail = async (req, res) => {
 		}
 
 		user.isVerified = true;
-		user.verificationToken = "";
+		user.verificationToken = undefined;
 		await user.save();
 
 		const jwtToken = jwt.sign(
@@ -195,6 +196,7 @@ const verifyEmail = async (req, res) => {
 				name: user.name,
 				email: user.email,
 				role: user.role,
+				isVerified: true,
 			},
 		});
 	} catch (error) {

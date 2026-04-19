@@ -32,7 +32,6 @@ function VerifyEmail() {
 					res.data.message || "Email verified successfully 🎉",
 				);
 
-				// AUTO LOGIN
 				localStorage.setItem("token", res.data.token);
 				localStorage.setItem("user", JSON.stringify(res.data.user));
 				localStorage.setItem("loginTime", Date.now());
