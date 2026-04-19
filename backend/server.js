@@ -6,11 +6,11 @@ const path = require("path");
 
 const connectDB = require("./config/db");
 
-const authRoutes = require("./routes/authroutes");
-const adminRoutes = require("./routes/adminRoutes");
-const jobRoutes = require("./routes/jobRoutes");
+const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const jobRoutes = require("./routes/jobRoutes");
 const applicationRoutes = require("./routes/applicationRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 
 const { protect, authorizeRoles } = require("./middlewares/authMiddleware");
