@@ -306,23 +306,31 @@ function Jobs() {
 			</div>
 
 			{/* PAGINATION */}
-			<div className="flex justify-center mt-10 gap-4">
+			<div className="flex justify-center items-center mt-10 gap-4">
 				<button
 					disabled={page === 1}
 					onClick={() => setPage(page - 1)}
-					className="px-4 py-2 bg-gray-300 rounded"
+					className={`px-5 py-2 rounded-lg font-medium transition ${
+						page === 1
+							? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+							: "text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-md"
+					}`}
 				>
 					Prev
 				</button>
 
-				<span className="text-lg font-semibold">
-					{page} / {totalPages}
+				<span className="px-4 py-2 rounded-lg font-semibold text-gray-800 dark:text-white backdrop-blur-xl bg-white/60 dark:bg-white/5 border border-white/20 shadow">
+					Page {page} of {totalPages}
 				</span>
 
 				<button
 					disabled={page === totalPages}
 					onClick={() => setPage(page + 1)}
-					className="px-4 py-2 bg-gray-300 rounded"
+					className={`px-5 py-2 rounded-lg font-medium transition ${
+						page === totalPages
+							? "bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+							: "text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-md"
+					}`}
 				>
 					Next
 				</button>

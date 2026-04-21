@@ -61,7 +61,7 @@ function AdminHR() {
 
 	return (
 		<div className="p-8 min-h-screen">
-			<h2 className="text-3xl font-bold mb-8 text-center text-blue-600 dark:text-purple-400">
+			<h2 className="text-4xl md:text-5xl font-extrabold text-center mb-12 bg-gradient-to-r from-blue-600 to-purple-500 bg-clip-text text-transparent">
 				HR Approval Requests
 			</h2>
 

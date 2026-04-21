@@ -13,7 +13,6 @@ function Navbar() {
 	const dropdownRef = useRef();
 	const notifRef = useRef();
 
-	// LOAD USER
 	useEffect(() => {
 		const loadUser = () => {
 			try {
@@ -36,7 +35,6 @@ function Navbar() {
 		return () => window.removeEventListener("storage", loadUser);
 	}, []);
 
-	// FETCH NOTIFICATIONS
 	useEffect(() => {
 		const fetchNotifications = async () => {
 			try {
@@ -56,7 +54,6 @@ function Navbar() {
 		if (user) fetchNotifications();
 	}, [user]);
 
-	// DARK MODE
 	useEffect(() => {
 		const savedTheme = localStorage.getItem("theme");
 
@@ -66,7 +63,6 @@ function Navbar() {
 		}
 	}, []);
 
-	// CLOSE DROPDOWNS ON OUTSIDE CLICK
 	useEffect(() => {
 		const handleClickOutside = (event) => {
 			if (
@@ -87,7 +83,6 @@ function Navbar() {
 			document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
 
-	// THEME TOGGLE
 	const toggleDarkMode = () => {
 		if (darkMode) {
 			document.documentElement.classList.remove("dark");
@@ -100,7 +95,6 @@ function Navbar() {
 		setDarkMode(!darkMode);
 	};
 
-	// LOGOUT
 	const handleLogout = () => {
 		localStorage.removeItem("token");
 		localStorage.removeItem("user");
@@ -115,7 +109,6 @@ function Navbar() {
 	return (
 		<nav className="relative z-50 bg-white dark:bg-gray-900 shadow-md">
 			<div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-				{/* LOGO */}
 				<Link to="/">
 					<h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-500 bg-clip-text text-transparent">
 						Hire<span>Hub</span>
@@ -123,7 +116,7 @@ function Navbar() {
 				</Link>
 
 				<div className="flex items-center space-x-5">
-					{/* COMMON LINKS */}
+					{/* COMMON LINK */}
 					{(!user ||
 						user.role === "student" ||
 						user.role === "hr") && (
@@ -133,78 +126,6 @@ function Navbar() {
 						>
 							Jobs
 						</Link>
-					)}
-
-					{/* STUDENT TOP LINKS */}
-					{user?.role === "student" && (
-						<>
-							<Link
-								to="/saved-jobs"
-								className="text-gray-900 dark:text-white font-medium"
-							>
-								Saved Jobs
-							</Link>
-							<Link
-								to="/my-applications"
-								className="text-gray-900 dark:text-white font-medium"
-							>
-								My Applications
-							</Link>
-						</>
-					)}
-
-					{/* HR TOP LINKS */}
-					{user?.role === "hr" && (
-						<>
-							<Link
-								to="/post-job"
-								className="text-gray-900 dark:text-white font-medium"
-							>
-								Post Job
-							</Link>
-							<Link
-								to="/my-jobs"
-								className="text-gray-900 dark:text-white font-medium"
-							>
-								My Jobs
-							</Link>
-							<Link
-								to="/hr-dashboard"
-								className="text-gray-900 dark:text-white font-medium"
-							>
-								HR Dashboard
-							</Link>
-						</>
-					)}
-
-					{/* ADMIN TOP LINKS */}
-					{user?.role === "admin" && (
-						<>
-							<Link
-								to="/admin"
-								className="text-gray-900 dark:text-white font-medium"
-							>
-								Dashboard
-							</Link>
-							<Link
-								to="/admin/users"
-								className="text-gray-900 dark:text-white font-medium"
-							>
-								Users
-							</Link>
-							<Link
-								to="/admin/jobs"
-								className="text-gray-900 dark:text-white font-medium"
-							>
-								Jobs
-							</Link>
-							<Link
-								to="/admin/hr-approval"
-								className="text-gray-900 dark:text-white font-medium"
-							>
-								HR Approval
-							</Link>
-						</>
 					)}
 
 					{/* NOTIFICATIONS */}
@@ -396,7 +317,6 @@ function Navbar() {
 						</div>
 					)}
 
-					{/* THEME */}
 					<button
 						onClick={toggleDarkMode}
 						className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:scale-110 transition"
