@@ -1,4 +1,3 @@
-
 ---
 
 ## 🚀 Installation
@@ -37,7 +36,7 @@ npm run dev
 
 ## 📌 About the Project
 
-HireHub is a full-stack MERN-based job portal that connects students with recruiters. It provides a seamless platform for job searching, posting, and managing applications with role-based access control and modern UI.
+HireHub is a full-stack MERN-based job portal that connects students with recruiters. It provides a seamless platform for job searching, posting, and managing applications with role-based access control.
 
 ---
 
@@ -151,23 +150,3 @@ B.Tech Final Year Project
 ## ⭐ Support
 
 If you like this project, give it a ⭐ on GitHub!
-
-
-## 📂 Project Structure
-
-HireHub/
-│
-├── backend/
-│ ├── controllers/
-│ ├── models/
-│ ├── routes/
-│ ├── middlewares/
-│ └── server.js
-│
-├── frontend/
-│ ├── src/
-│ │ ├── components/
-│ │ ├── pages/
-│ │ ├── services/
-│ │ └── hooks/
-│ └── vite.config.js
