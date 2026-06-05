@@ -1,8 +1,16 @@
 require("dotenv").config();
 
+const fs = require("fs");
+const path = require("path");
+
+const uploadPath = path.join(__dirname, "uploads");
+
+if (!fs.existsSync(uploadPath)) {
+	fs.mkdirSync(uploadPath);
+}
+
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
 
 const connectDB = require("./config/db");
 
@@ -38,7 +46,7 @@ app.use(
 );
 
 // Static folder for uploads
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
 app.use("/api/auth", authRoutes);

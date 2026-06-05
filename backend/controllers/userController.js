@@ -45,15 +45,18 @@ const updateProfile = async (req, res) => {
 
 const uploadResume = async (req, res) => {
 	try {
+		console.log("FILE:", req.file);
+		console.log("USER:", req.user);
+
 		if (!req.file) {
 			return res.status(400).json({
 				message: "No file uploaded",
 			});
 		}
 
-		if (!req.user || !req.user._id) {
+		if (!req.user) {
 			return res.status(401).json({
-				message: "User not authenticated",
+				message: "Not authenticated",
 			});
 		}
 
@@ -72,11 +75,9 @@ const uploadResume = async (req, res) => {
 			success: true,
 			resume: user.resume,
 		});
-	} catch (error) {
-		console.error("UPLOAD ERROR:", error);
-		res.status(500).json({
-			message: error.message,
-		});
+	} catch (err) {
+		console.error("UPLOAD ERROR:", err);
+		res.status(500).json({ message: err.message });
 	}
 };
 
