@@ -45,13 +45,13 @@ const updateProfile = async (req, res) => {
 
 const uploadResume = async (req, res) => {
 	try {
-		const user = await User.findById(req.user._id);
-
 		if (!req.file) {
 			return res.status(400).json({
 				message: "No file uploaded",
 			});
 		}
+
+		const user = await User.findById(req.user._id);
 
 		user.resume = `/uploads/${req.file.filename}`;
 

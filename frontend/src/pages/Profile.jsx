@@ -76,7 +76,7 @@ function Profile() {
 			const formData = new FormData();
 			formData.append("resume", file);
 
-			const res = await API.post("/auth/upload-resume", formData, {
+			const res = await API.post("/users/upload-resume", formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 				},
