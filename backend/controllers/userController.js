@@ -43,6 +43,31 @@ const updateProfile = async (req, res) => {
 	}
 };
 
+const uploadResume = async (req, res) => {
+	try {
+		const user = await User.findById(req.user._id);
+
+		if (!req.file) {
+			return res.status(400).json({
+				message: "No file uploaded",
+			});
+		}
+
+		user.resume = `/uploads/${req.file.filename}`;
+
+		await user.save();
+
+		res.json({
+			success: true,
+			resume: user.resume,
+		});
+	} catch (error) {
+		res.status(500).json({
+			message: error.message,
+		});
+	}
+};
+
 // 🔥 SAVE / UNSAVE JOB
 const toggleSaveJob = async (req, res) => {
 	try {
@@ -94,6 +119,7 @@ const getSavedJobs = async (req, res) => {
 module.exports = {
 	getMyProfile,
 	updateProfile,
+	uploadResume,
 	toggleSaveJob,
 	getSavedJobs,
 };
