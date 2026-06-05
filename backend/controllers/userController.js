@@ -51,10 +51,21 @@ const uploadResume = async (req, res) => {
 			});
 		}
 
+		if (!req.user || !req.user._id) {
+			return res.status(401).json({
+				message: "User not authenticated",
+			});
+		}
+
 		const user = await User.findById(req.user._id);
 
-		user.resume = `/uploads/${req.file.filename}`;
+		if (!user) {
+			return res.status(404).json({
+				message: "User not found",
+			});
+		}
 
+		user.resume = `/uploads/${req.file.filename}`;
 		await user.save();
 
 		res.json({
@@ -62,6 +73,7 @@ const uploadResume = async (req, res) => {
 			resume: user.resume,
 		});
 	} catch (error) {
+		console.error("UPLOAD ERROR:", error);
 		res.status(500).json({
 			message: error.message,
 		});
